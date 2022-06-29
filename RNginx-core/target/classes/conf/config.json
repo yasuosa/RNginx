@@ -1,0 +1,13 @@
+{
+  "server": {
+    "port": 9090,
+    "name": "RNginx-ProxyServer"
+  },
+  "proxy": [
+    {
+      "location": "/",
+      "proxy_pass": "http://localhost:8080/"
+    }
+  ]
+}
+
