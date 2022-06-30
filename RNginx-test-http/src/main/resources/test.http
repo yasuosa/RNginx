@@ -4,7 +4,7 @@ GET http://localhost:9090/test/get
 
 
 ###
-POST http://localhost:9090/test/post
+POST http://localhost:9090/test1/post
 Content-Type: application/json
 
 {
@@ -14,3 +14,15 @@ Content-Type: application/json
 
 ###
 POST http://localhost:9090/test/upload
+
+
+###
+POST http://localhost:9090/test2/post
+Content-Type: application/json
+
+{
+  "userId": "rpy",
+  "username": "rpy"
+}
+
+

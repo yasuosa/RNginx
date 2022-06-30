@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * @program: RNginx
- * @description: 代理处理器基类
+ * @description: 代理处理器基类  不建议使用 ---------- 未完成版
  * @author: 任鹏宇
  * @create: 2022-06-29 15:24
  **/
