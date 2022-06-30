@@ -7,7 +7,7 @@ import io.vertx.httpproxy.HttpProxy;
 
 /**
  * @program: RNginx
- * @description:
+ * @description:  稍等加强
  * @author: 任鹏宇
  * @create: 2022-06-30 15:26
  **/
