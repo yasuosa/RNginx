@@ -1,6 +1,7 @@
 package com.rngin.core.proxy;
 
 import com.rngin.core.handler.ProxyHttpServerHandler;
+import com.rngin.core.router.ProxyRouterContext;
 import com.rnginx.common.entriy.config.BaseProxyConfig;
 import com.rnginx.common.entriy.config.ProxyServerConfig;
 import com.rnginx.common.log.LogTip;
@@ -10,6 +11,9 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.LocalMap;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.SessionHandler;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -59,8 +63,12 @@ public class ProxyVerticle extends AbstractVerticle {
     private void startProxyServer(Vertx vertx, JsonObject result) {
         // 将配置共享
         Integer port = doShareConfigData(vertx, result);
+
+
+
         vertx.createHttpServer()
-                .requestHandler(new ProxyHttpServerHandler(vertx))
+                //.requestHandler(new ProxyHttpServerHandler(vertx))
+                .requestHandler(ProxyRouterContext.create(vertx))
                 .listen(port)
                 .onSuccess( event ->  {
                     log.info(LogTip.SERVER_SUCCEED,port);

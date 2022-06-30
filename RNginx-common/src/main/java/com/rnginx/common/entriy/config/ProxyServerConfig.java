@@ -20,7 +20,7 @@ public class ProxyServerConfig extends BaseProxyConfig  implements IProxyConfig<
 
 
     // 默认端口
-    private static final Integer DEFAULT_PORT = 9999;
+    private static final Integer DEFAULT_PORT = 9090;
 
     // 默认名称
     private static final String DEFAULT_SERVER_NAME = "RNGINX_PROXY_SERVER";

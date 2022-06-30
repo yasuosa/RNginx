@@ -45,6 +45,9 @@ public  class BaseProxyConfig implements Serializable {
     public static final String PROXY_KEY_LOCATION= "location";
     public static final String PROXY_KEY_PROXY_PASS = "proxy_pass";
     public static final String PROXY_KEY_ROOT= "root";
+    public static final String PROXY_KEY_CACHE= "cache";
+    public static final String PROXY_KEY_MAX_AGE_SECONDS= "maxAgeSeconds";
+
 
 
 

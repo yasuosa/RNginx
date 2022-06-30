@@ -1,2 +1,16 @@
 ###
-GET http://localhost:9090/test
+GET http://localhost:9090/test/get
+
+
+
+###
+POST http://localhost:9090/test/post
+Content-Type: application/json
+
+{
+  "userId": "rpy",
+  "username": "rpy"
+}
+
+###
+POST http://localhost:9090/test/upload

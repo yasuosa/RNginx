@@ -5,8 +5,14 @@
   },
   "proxy": [
     {
-      "location": "/",
+      "location": "/test*",
       "proxy_pass": "http://localhost:8080/"
+    },
+    {
+      "location":"/*",
+      "root": "webroot\\myWeb",
+      "cache": true,
+      "maxAgeSeconds": 7200000
     }
   ]
 }

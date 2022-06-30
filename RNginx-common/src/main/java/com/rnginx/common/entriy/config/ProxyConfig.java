@@ -24,6 +24,7 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
     private static final String DEFAULT_ROOT_ABS_PATH = DEFAULT_PATH;
 
 
+    /*-------------------- 路由配置参数开始 ----------------------*/
     // 匹配路径 支持正则
     private String location;
 
@@ -31,9 +32,31 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
     // 代理路径
     private String proxyPass;
 
+    /*-------------------- 路由配置参数开始 ----------------------*/
 
-    // 前端路径
-    private String root;
+
+
+
+
+   /*-------------------- 静态资源配置参数开始 ----------------------*/
+    private String root; // 静态资源根目录
+
+    private Boolean cache;  // 是否缓存
+
+    private Long maxAgeSeconds; // 缓存时间
+
+    /*-------------------- 静态资源配置参数结束 ----------------------*/
+
+
+
+
+
+
+
+
+
+
+
 
 
     private String host;
@@ -41,6 +64,10 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
     private Integer port;
 
     private String uri;
+
+    // 静态资源
+    private boolean staticResource;
+
 
 
 
@@ -64,13 +91,24 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
             this.location = config.getString(PROXY_KEY_LOCATION);
             this.proxyPass = config.getString(PROXY_KEY_PROXY_PASS);
             this.root = config.getString(PROXY_KEY_ROOT);
+            this.cache = config.getBoolean(PROXY_KEY_CACHE,false);
+            this.maxAgeSeconds = config.getLong(PROXY_KEY_MAX_AGE_SECONDS, (long) (24 * 6000 * 60));
+
+            if(null != this.root && null != this.proxyPass){
+                throw new Error("静态配置与动态代理Url只能存在一个！" + config.toString());
+            }
+
+            this.staticResource = null != this.root;
+
+
             // TODO dns需要解析
-            if(null != this.proxyPass){
+            if(!this.staticResource){
                 uri = new URI(this.proxyPass );
                 this.host = uri.getHost();
                 this.uri = uri.getPath();
                 this.port = uri.getPort();
             }
+
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
