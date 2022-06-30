@@ -20,8 +20,8 @@ import java.net.URLEncoder;
  * @create: 2022-06-29 18:51
  **/
 @RestController
-@RequestMapping("/test")
-public class TestController {
+@RequestMapping("/test1")
+public class Test1Controller {
 
 
     private String filePath = "E:\\workstudy\\vertx\\RNginx\\RNginx-test-http\\file\\";

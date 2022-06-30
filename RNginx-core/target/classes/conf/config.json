@@ -3,10 +3,29 @@
     "port": 9090,
     "name": "RNginx-ProxyServer"
   },
+
+  "upstream": [
+    {
+      "name":"local",
+      "type": "robin",
+      "proxy_pass": "",
+      "nodes": [
+        "http://localhost:8080/",
+        "http://localhost:8081/",
+        "http://localhost:8082/"
+      ]
+    }
+
+
+  ],
   "proxy": [
     {
-      "location": "/test*",
+      "location": "/test1*",
       "proxy_pass": "http://localhost:8080/"
+    },
+    {
+      "location": "/test2*",
+      "upstream": "local"
     },
     {
       "location":"/*",

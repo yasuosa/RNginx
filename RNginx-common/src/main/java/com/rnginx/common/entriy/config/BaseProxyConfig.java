@@ -26,6 +26,7 @@ public  class BaseProxyConfig implements Serializable {
 
     public static final String PROXY_SERVER= "server";
     public static final String PROXY= "proxy";
+    public static final String UPSTREAM= "upstream";
 
 
 
@@ -50,6 +51,11 @@ public  class BaseProxyConfig implements Serializable {
 
 
 
-
+    /**
+     * upstream
+     */
+    public static final String UPSTREAM_KEY_NAME = "name";
+    public static final String UPSTREAM_KEY_TYPE = "type";
+    public static final String UPSTREAM_KEY_NODES= "nodes";
 
 }

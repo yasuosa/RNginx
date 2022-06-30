@@ -35,10 +35,13 @@ public class ProxyServerConfig extends BaseProxyConfig  implements IProxyConfig<
     private List<ProxyConfig> proxyConfigList;
 
 
+    private List<Upstream> upstreamList;
+
     public ProxyServerConfig(){
         this.port = DEFAULT_PORT;
         this.name =DEFAULT_SERVER_NAME;
         this.proxyConfigList = new ArrayList<>();
+        this.upstreamList = new ArrayList<>();
     }
 
 
@@ -56,9 +59,24 @@ public class ProxyServerConfig extends BaseProxyConfig  implements IProxyConfig<
             this.port = proxyServerConfig.getInteger(PROXY_SERVER_KEY_PORT,DEFAULT_PORT);
             this.name = proxyServerConfig.getString(PROXY_SERVER_KEY_NAME,DEFAULT_SERVER_NAME);
             initProxyConfig(config);
+            initUpstreamNode(config);
         }
     }
 
+    /**
+     * 初始化上游结点
+     * @param config
+     */
+    private void initUpstreamNode(JsonObject config) {
+        JsonArray upstreamNodes = config.getJsonArray(UPSTREAM);
+        if(null != upstreamNodes){
+            upstreamNodes.forEach(jsonObj -> {
+                Upstream upstream = new Upstream();
+                upstream.getConfig((JsonObject) jsonObj);
+                this.upstreamList.add(upstream);
+            });
+        }
+    }
 
 
     /**
@@ -66,7 +84,6 @@ public class ProxyServerConfig extends BaseProxyConfig  implements IProxyConfig<
      * @param config
      */
     private void initProxyConfig(JsonObject config) {
-        this.proxyConfigList = new ArrayList<>();
         JsonArray proxyConfigList = config.getJsonArray(PROXY);
         if(null != proxyConfigList){
             proxyConfigList.forEach(jsonObj -> {

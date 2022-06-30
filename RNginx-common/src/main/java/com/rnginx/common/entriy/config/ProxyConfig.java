@@ -1,5 +1,6 @@
 package com.rnginx.common.entriy.config;
 
+import com.sun.jndi.toolkit.url.Uri;
 import io.vertx.core.json.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,13 +29,13 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
     // 匹配路径 支持正则
     private String location;
 
+    // 上游名称
+    private String upstream;
 
     // 代理路径
     private String proxyPass;
 
     /*-------------------- 路由配置参数开始 ----------------------*/
-
-
 
 
 
@@ -49,16 +50,6 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
 
 
 
-
-
-
-
-
-
-
-
-
-
     private String host;
 
     private Integer port;
@@ -67,6 +58,8 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
 
     // 静态资源
     private boolean staticResource;
+
+    private boolean upstreamResource;
 
 
 
@@ -86,32 +79,62 @@ public class ProxyConfig extends BaseProxyConfig implements IProxyConfig<ProxyCo
 
     @Override
     public void initConfig(JsonObject config) {
-        URI uri = null;
         try {
             this.location = config.getString(PROXY_KEY_LOCATION);
             this.proxyPass = config.getString(PROXY_KEY_PROXY_PASS);
             this.root = config.getString(PROXY_KEY_ROOT);
             this.cache = config.getBoolean(PROXY_KEY_CACHE,false);
             this.maxAgeSeconds = config.getLong(PROXY_KEY_MAX_AGE_SECONDS, (long) (24 * 6000 * 60));
+            this.upstream = config.getString(UPSTREAM);
 
-            if(null != this.root && null != this.proxyPass){
-                throw new Error("静态配置与动态代理Url只能存在一个！" + config.toString());
+            // 优先级 静态 > 上流 > 普通代理
+            // TODO dns需要解析  域名类 目前没有写 可能需要dns解析 得到ip:port
+
+            if(null != this.root){
+                doHandlerStaticResource();
+                return;
             }
 
-            this.staticResource = null != this.root;
-
-
-            // TODO dns需要解析
-            if(!this.staticResource){
-                uri = new URI(this.proxyPass );
-                this.host = uri.getHost();
-                this.uri = uri.getPath();
-                this.port = uri.getPort();
+            if(null != this.upstream){
+                doHandlerUpstream();
+                return;
             }
+
+            if(null != this.proxyPass){
+                doHandlerProxyPass();
+                //return;
+            }
+
 
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * 处理普通代理
+     */
+    private void doHandlerProxyPass() throws URISyntaxException {
+        URI uri = new URI(this.proxyPass );
+        this.host = uri.getHost();
+        this.uri = uri.getPath();
+        this.port = uri.getPort();
+    }
+
+
+    /**
+     * 处理上流结点配置
+     */
+    private void doHandlerUpstream() {
+        this.upstreamResource = true;
+    }
+
+    /**
+     * 处理静态资源
+     */
+    private void doHandlerStaticResource() {
+        this.staticResource = true;
     }
 
 

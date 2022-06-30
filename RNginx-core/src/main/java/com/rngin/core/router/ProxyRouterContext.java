@@ -1,8 +1,12 @@
 package com.rngin.core.router;
 
+import com.rngin.core.handler.ProxyHttp;
+import com.rngin.core.handler.ProxyServerHandler;
+import com.rngin.core.interceptor.ProxyServerInterceptor;
 import com.rnginx.common.entriy.config.BaseProxyConfig;
 import com.rnginx.common.entriy.config.ProxyConfig;
 import com.rnginx.common.entriy.config.ProxyServerConfig;
+import com.rnginx.common.entriy.config.Upstream;
 import com.rnginx.common.exception.ProxyConfigException;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
@@ -20,7 +24,10 @@ import io.vertx.ext.web.proxy.handler.ProxyHandler;
 import io.vertx.httpproxy.HttpProxy;
 
 import java.awt.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @program: RNginx
@@ -94,11 +101,42 @@ public class ProxyRouterContext implements IRouterHandle<Router, Void> {
                     .setMaxAgeSeconds(proxyConfig.getMaxAgeSeconds())); // 是否
         }
 
+        // 存在多个上流结点
+        else if(proxyConfig.isUpstreamResource()){
+
+            List<Upstream> upstreamList = config.getUpstreamList().stream()
+                    .filter(up -> up.getName().equalsIgnoreCase(proxyConfig.getUpstream())).collect(Collectors.toList());
+
+            if(upstreamList.size() != 1){
+                throw new ProxyConfigException("上流结点配置异常！未配置或存在多个！");
+            }
+            Upstream upstream = upstreamList.get(0);
+
+
+            ProxyHttp proxyHttp = ProxyHttp.reverseProxy(vertx.createHttpClient());
+            proxyHttp.addInterceptor(new ProxyServerInterceptor());
+
+
+            for (String node : upstream.getNodes()) {
+                URI uri = null;
+                try {
+                    uri = new URI(node);
+                    proxyHttp.origin(uri.getPort(),uri.getHost());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+            route.handler(LoggerHandler.create())
+                    .handler(new ProxyServerHandler(proxyHttp)); // 拦截
+
+        }
         // 路由转发
         else {
             route.handler(LoggerHandler.create())
-                    .handler(ProxyHandler.create(HttpProxy.reverseProxy(vertx.createHttpClient())
-                            .origin(proxyConfig.getPort(), proxyConfig.getHost())));
+                    .handler(ProxyHandler.create(
+                            HttpProxy.reverseProxy(vertx.createHttpClient())
+                            .origin(proxyConfig.getPort(), proxyConfig.getHost())
+                            .addInterceptor(new ProxyServerInterceptor()))); // 拦截
         }
 
     }

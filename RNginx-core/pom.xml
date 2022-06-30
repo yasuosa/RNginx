@@ -17,6 +17,14 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-proxy</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-http-proxy</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -58,6 +66,7 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 </project>
