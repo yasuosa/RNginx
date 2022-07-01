@@ -19,8 +19,8 @@ import java.net.URLEncoder;
  * @create: 2022-06-29 18:51
  **/
 @RestController
-@RequestMapping("/test4")
-public class Test4Controller {
+@RequestMapping("/random")
+public class RandomController {
 
 
     @Value("${server.port}")

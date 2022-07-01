@@ -15,21 +15,17 @@ import io.vertx.httpproxy.HttpProxy;
  **/
 public class ProxyServerHandler extends ProxyHandlerImpl {
 
-    private ProxyHttp proxy;
-
     public ProxyServerHandler(HttpProxy httpProxy) {
         super(httpProxy);
-        this.proxy = (ProxyHttp) httpProxy;
     }
 
 
     @Override
     public void handle(RoutingContext ctx) {
 
-
-        //System.out.println("请求前");
+        System.out.println("请求前");
         super.handle(ctx);
 
-        //System.out.println("请求后");
+        System.out.println("请求后");
     }
 }

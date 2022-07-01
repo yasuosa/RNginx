@@ -2,11 +2,10 @@ package com.rnginx.test.http.controller;
 
 import com.rnginx.test.http.domain.User;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,21 +19,24 @@ import java.net.URLEncoder;
  * @create: 2022-06-29 18:51
  **/
 @RestController
-@RequestMapping("/test1")
-public class Test1Controller {
+@RequestMapping("/robin")
+public class RobinController {
 
+
+    @Value("${server.port}")
+    private String port;
 
     private String filePath = "E:\\workstudy\\vertx\\RNginx\\RNginx-test-http\\file\\";
 
     @GetMapping("/get")
     public String test_get(){
-        return "w1";
+        return "w1" + port;
     }
 
 
     @PostMapping("/post")
     public String test_post(@RequestBody User user){
-        return user.toString();
+        return user.toString() + port;
     }
 
 
@@ -42,7 +44,7 @@ public class Test1Controller {
     public String test_upload(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
         file.transferTo(new File(filePath + originalFilename));
-        return originalFilename;
+        return originalFilename + port;
     }
 
 
@@ -57,7 +59,7 @@ public class Test1Controller {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("multipart/form-data");
         response.setHeader("Content-Disposition",
-                "attachment;fileName="+ URLEncoder.encode(fileName, "UTF-8"));
+                "attachment;fileName="+ URLEncoder.encode(fileName+port, "UTF-8"));
         // 5. 处理下载流复制
         IOUtils.copy(is,response.getOutputStream());
         IOUtils.closeQuietly(is);

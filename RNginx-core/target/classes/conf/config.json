@@ -63,29 +63,31 @@
   ],
   "proxy": [
     {
-      "location": "/test1*",
+      "location": "/test*",
       "proxy_pass": "http://localhost:8080/"
     },
     {
-      "location": "/test2*",
+      "location": "/robin*",
       "upstream": "local-robin"
     },
     {
-      "location": "/test3*",
+      "location": "/weight*",
       "upstream": "local-weight"
     },
     {
-      "location": "/test4*",
+      "location": "/random*",
       "upstream": "local-random"
     },
     {
-      "location": "/test5*",
+      "location": "/iphash*",
       "upstream": "local-ip_hash"
-    }
+    },
+
+
     {
-      "location":"/*",
-      "root": "webroot\\myWeb",
-      "cache": true,
+      "location": "/*",
+      "root": "webroot\\hello",
+      "cache": false,
       "maxAgeSeconds": 7200000
     }
   ]

@@ -19,8 +19,8 @@ import java.net.URLEncoder;
  * @create: 2022-06-29 18:51
  **/
 @RestController
-@RequestMapping("/test5")
-public class Test5Controller {
+@RequestMapping("/weight")
+public class WeightController {
 
 
     @Value("${server.port}")

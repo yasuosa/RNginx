@@ -17,7 +17,7 @@ POST http://localhost:9090/test/upload
 
 
 ###
-POST http://localhost:9090/test2/post
+POST http://localhost:9090/random/post
 Content-Type: application/json
 
 {
@@ -25,4 +25,35 @@ Content-Type: application/json
   "username": "rpy"
 }
 
+
+###
+POST http://localhost:9090/weight/post
+Content-Type: application/json
+
+{
+  "userId": "rpy",
+  "username": "rpy"
+}
+
+
+
+###
+POST http://localhost:9090/iphash/post
+Content-Type: application/json
+
+{
+  "userId": "rpy",
+  "username": "rpy"
+}
+
+
+
+###
+POST http://localhost:9090/robin/post
+Content-Type: application/json
+
+{
+  "userId": "rpy",
+  "username": "rpy"
+}
 

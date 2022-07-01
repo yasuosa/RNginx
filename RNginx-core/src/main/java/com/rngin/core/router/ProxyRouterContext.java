@@ -59,9 +59,9 @@ public class ProxyRouterContext implements IRouterHandle<Router, Void> {
     private Router doCreate() {
         Router router = Router.router(vertx);
         // 开始页面
-        router.get("/").handler(StaticHandler.create("webroot\\root")
-                .setAllowRootFileSystemAccess(true)
-                .setCachingEnabled(false)); // 是否缓存
+        router.get("/").handler(StaticHandler.create("webroot\\root\\")
+                        .setAllowRootFileSystemAccess(true)
+                        .setCachingEnabled(false)); // 是否缓存
 
         List<ProxyConfig> proxyConfigList = config.getProxyConfigList();
         if (null != proxyConfigList) {
@@ -73,6 +73,7 @@ public class ProxyRouterContext implements IRouterHandle<Router, Void> {
         handlerExceptionHandler(router);
         return router;
     }
+
 
 
     /**
@@ -101,12 +102,12 @@ public class ProxyRouterContext implements IRouterHandle<Router, Void> {
         }
 
         // 存在多个上流结点
-        else if (proxyConfig.isUpstreamResource()) {
+        else if(proxyConfig.isUpstreamResource()){
 
             List<Upstream> upstreamList = config.getUpstreamList().stream()
                     .filter(up -> up.getName().equalsIgnoreCase(proxyConfig.getUpstream())).collect(Collectors.toList());
 
-            if (upstreamList.size() != 1) {
+            if(upstreamList.size() != 1){
                 throw new ProxyConfigException("上流结点配置异常！未配置或存在多个！");
             }
             Upstream upstream = upstreamList.get(0);
@@ -120,15 +121,15 @@ public class ProxyRouterContext implements IRouterHandle<Router, Void> {
             for (String node : upstream.getNodes()) {
                 proxyHttp.origin(node);
             }
-            //route.handler(LoggerHandler.create())
-            route.handler(new ProxyServerHandler(proxyHttp)); // 拦截
+            route.handler(LoggerHandler.create())
+                    .handler(new ProxyServerHandler(proxyHttp)); // 拦截
 
         }
         // 路由转发
         else {
-            //route.handler(LoggerHandler.create())
-            route.handler(ProxyHandler.create(
-                    HttpProxy.reverseProxy(vertx.createHttpClient())
+            route.handler(LoggerHandler.create())
+                    .handler(ProxyHandler.create(
+                            HttpProxy.reverseProxy(vertx.createHttpClient())
                             .origin(proxyConfig.getPort(), proxyConfig.getHost())
                             .addInterceptor(new ProxyServerInterceptor()))); // 拦截
         }

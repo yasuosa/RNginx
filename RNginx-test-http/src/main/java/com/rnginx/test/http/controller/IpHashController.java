@@ -19,8 +19,8 @@ import java.net.URLEncoder;
  * @create: 2022-06-29 18:51
  **/
 @RestController
-@RequestMapping("/test2")
-public class Test2Controller {
+@RequestMapping("/iphash")
+public class IpHashController {
 
 
     @Value("${server.port}")
