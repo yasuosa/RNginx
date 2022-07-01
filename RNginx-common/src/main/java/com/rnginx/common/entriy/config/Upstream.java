@@ -1,5 +1,6 @@
 package com.rnginx.common.entriy.config;
 
+import com.rnginx.common.entriy.LoadBalance;
 import io.vertx.core.json.JsonObject;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,8 @@ public class Upstream  extends BaseProxyConfig implements  IProxyConfig<Upstream
 
     private String type;
 
+    private LoadBalance lb;
+
 
     private List<String> nodes;
 
@@ -42,6 +45,8 @@ public class Upstream  extends BaseProxyConfig implements  IProxyConfig<Upstream
         config.getJsonArray(UPSTREAM_KEY_NODES).forEach(node->{
             nodes.add(String.valueOf(node));
         });
+
+        this.lb = LoadBalance.nameOf(this.type);
     }
 
     @Override

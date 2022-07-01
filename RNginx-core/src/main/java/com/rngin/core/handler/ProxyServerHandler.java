@@ -1,6 +1,8 @@
 package com.rngin.core.handler;
 
 import io.netty.handler.proxy.ProxyHandler;
+import io.vertx.core.Handler;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.proxy.handler.impl.ProxyHandlerImpl;
 import io.vertx.httpproxy.HttpProxy;
@@ -13,14 +15,21 @@ import io.vertx.httpproxy.HttpProxy;
  **/
 public class ProxyServerHandler extends ProxyHandlerImpl {
 
+    private ProxyHttp proxy;
+
     public ProxyServerHandler(HttpProxy httpProxy) {
         super(httpProxy);
+        this.proxy = (ProxyHttp) httpProxy;
     }
 
 
     @Override
     public void handle(RoutingContext ctx) {
 
+
+        //System.out.println("请求前");
         super.handle(ctx);
+
+        //System.out.println("请求后");
     }
 }

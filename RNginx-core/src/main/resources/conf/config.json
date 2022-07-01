@@ -6,7 +6,8 @@
 
   "upstream": [
     {
-      "name":"local",
+      "desc": "轮询",
+      "name":"local-robin",
       "type": "robin",
       "proxy_pass": "",
       "nodes": [
@@ -14,9 +15,51 @@
         "http://localhost:8081/",
         "http://localhost:8082/"
       ]
+    },
+    {
+      "desc": "权重",
+      "name":"local-weight",
+      "type": "weight",
+      "proxy_pass": "",
+      "nodes": [
+        "http://localhost:8080/  0.2",
+        "http://localhost:8081/  0.4",
+        "http://localhost:8082/  0.4"
+      ]
+    },
+    {
+      "desc": "ipHash",
+      "name": "local-ip_hash",
+      "type": "ip_hash",
+      "proxy_pass": "",
+      "nodes": [
+        "http://localhost:8080/",
+        "http://localhost:8081/",
+        "http://localhost:8082/"
+      ]
+    },
+    {
+      "desc": "最小响应时间",
+      "name":"local-fail",
+      "type": "fail",
+      "proxy_pass": "",
+      "nodes": [
+        "http://localhost:8080/",
+        "http://localhost:8081/",
+        "http://localhost:8082/"
+      ]
+    },
+    {
+      "desc": "随机",
+      "name":"local-random",
+      "type": "random",
+      "proxy_pass": "",
+      "nodes": [
+        "http://localhost:8080/",
+        "http://localhost:8081/",
+        "http://localhost:8082/"
+      ]
     }
-
-
   ],
   "proxy": [
     {
@@ -25,8 +68,20 @@
     },
     {
       "location": "/test2*",
-      "upstream": "local"
+      "upstream": "local-robin"
     },
+    {
+      "location": "/test3*",
+      "upstream": "local-weight"
+    },
+    {
+      "location": "/test4*",
+      "upstream": "local-random"
+    },
+    {
+      "location": "/test5*",
+      "upstream": "local-ip_hash"
+    }
     {
       "location":"/*",
       "root": "webroot\\myWeb",
