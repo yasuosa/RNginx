@@ -32,8 +32,12 @@
 ![动静分离](img/动静分离.png) ![反向代理](img/反向代理.png)
 - 负载均衡
 ![负载均衡](img/负载均衡.png)
-- RNginx Vs Nginx
+- RNginx Vs Nginx  (胜利！！！)
+    - GET
 ![vs](img/vs.png)
+    - POST
+  ![vs](img/post_Vs.png)
+
 
 #### 未来计划
 - [ ] 第一版有些地方有点臃肿，后续再来优化吧
